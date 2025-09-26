@@ -1,6 +1,6 @@
 # SVM-RFE (Breast Cancer) — Demo rigorosa
 
-![CI](https://github.com/<TUO_USER>/<TUO_REPO>/actions/workflows/run.yml/badge.svg)
+![CI](https://github.com/MAGuriguer/fs-rfe-demo/actions/workflows/run.yml/badge.svg)
 
 Selezione di feature con **SVM-RFE (LinearSVC)** su dataset pubblico *Breast Cancer Wisconsin (Diagnostic)*.  
 Obiettivi:
