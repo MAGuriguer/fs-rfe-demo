@@ -12,7 +12,7 @@ Selezione di feature con **SVM-RFE (LinearSVC)** su dataset pubblico *Breast Can
   - Curva **#feature vs AUC**  
     ![AUC curve](results/rfe_nfeat_vs_auc.png)
   - **Top coefficienti** SVM (dopo RFE)  
-    ![Top coeffs](results/rfe_coeffs_top15.png)
+    ![Top coeffs](results/rfe_coeffs_top12.png)
 
 **Nested CV + Stabilità**
 - Outer CV (stima onesta): **Accuracy / F1 / ROC-AUC** in `results/summary.json`  
