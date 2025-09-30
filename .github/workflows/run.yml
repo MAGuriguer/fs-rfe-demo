@@ -35,16 +35,23 @@ jobs:
           test -f results/rfe_features.csv
           test -f results/rfe_nfeat_vs_auc.png
           test -f results/metrics_rfe.json
-          test -f results/rfe_coeffs_top15.png || true
+          test -f results/rfe_coeffs_top12.png || true
           test -f results/svm_coefficients.csv || true
 
-      - name: Run Nested + Stability
+      - name: Run Nested + Stability (RFE)
         run: |
           python src/rfe_nested_stability.py --min_features 5 --n_outer 5 --n_repeats 50 --subsample 0.8
           test -f results/metrics.csv
           test -f results/summary.json
           test -f results/features_selected.csv
           test -f results/stability_top20.png
+
+      - name: Run Sparse Group Lasso (SGL)
+        run: |
+          python src/sgl_stability.py --n_repeats 50 --subsample 0.8
+          test -f results/sgl_summary.json
+          test -f results/sgl_grid_auc.png
+          test -f results/sgl_stability_top20.png
 
       - name: Upload artifacts (results)
         uses: actions/upload-artifact@v4
