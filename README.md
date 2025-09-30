@@ -8,18 +8,18 @@ Selezione di feature con **SVM-RFE (LinearSVC)** su dataset pubblico *Breast Can
 **RFE (5-fold, demo)**
 - **#feature selezionate:** 12  
 - **ROC-AUC (media ± std):** **0.985 ± 0.016**  
-- **Figure**  
+- **Figure**
   - Curva **#feature vs AUC**  
-    ![AUC curve](results/rfe_nfeat_vs_auc.png)
+    ![AUC curve](assets/rfe_nfeat_vs_auc.png)
   - **Top coefficienti** SVM (dopo RFE)  
-    ![Top coeffs](results/rfe_coeffs_top12.png)
+    ![Top coeffs](assets/rfe_coeffs_top12.png)
 
 **Nested CV + Stabilità**
 - Outer CV (stima onesta): **Accuracy / F1 / ROC-AUC** in `results/summary.json`  
 - **Stabilità** (bootstrap, 100× @ 0.8): frequenza di selezione per feature in `results/features_selected.csv`  
-  ![Stability](results/stability_top20.png)
+  ![Stability](assets/stability_top20.png)
 
-> Gli artifact con gli output si possono scaricare dalla pagina **Actions** del repository.
+> Gli artifact con gli output completi si possono scaricare dalla pagina **Actions** del repository.
 
 ---
 
