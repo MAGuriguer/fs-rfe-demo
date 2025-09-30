@@ -1,38 +1,61 @@
-# SVM-RFE (Breast Cancer) — Demo rigorosa
+# Feature Selection Playbook — Breast Cancer (sklearn)
 ![CI](https://github.com/MAGuriguer/fs-rfe-demo/actions/workflows/run.yml/badge.svg)
 
-Selezione di feature con **SVM-RFE (LinearSVC)** su dataset pubblico *Breast Cancer Wisconsin (Diagnostic)*.
+Selezione di feature su *Breast Cancer Wisconsin (Diagnostic)* con metodi **classici ma rigorosi**, risultati riproducibili (Makefile + CI) e grafici pronti da mostrare.
+
+---
 
 ## Risultati (TL;DR)
 
-**RFE (5-fold, demo)**
+### SVM-RFE (wrapper con SVM lineare)
 - **#feature selezionate:** 12  
-- **ROC-AUC (media ± std):** **0.985 ± 0.016**  
+- **ROC-AUC (5-fold, media ± std):** **0.985 ± 0.016**
 - **Figure**
   - Curva **#feature vs AUC**  
     ![AUC curve](assets/rfe_nfeat_vs_auc.png)
   - **Top coefficienti** SVM (dopo RFE)  
     ![Top coeffs](assets/rfe_coeffs_top12.png)
+  - **Stabilità** (bootstrap 100× @ 0.8)  
+    ![Stability](assets/stability_top20.png)
 
-**Nested CV + Stabilità**
-- Outer CV (stima onesta): **Accuracy / F1 / ROC-AUC** in `results/summary.json`  
-- **Stabilità** (bootstrap, 100× @ 0.8): frequenza di selezione per feature in `results/features_selected.csv`  
-  ![Stability](assets/stability_top20.png)
+### Sparse Group Lasso (SGL) — metodo della rassegna
+- **ROC-AUC (5-fold, media ± std):** **0.994 ± 0.006**  
+- **Best params:** α (L1-ratio) = **0.4**, λ = **0.001**  
+- **Gruppi usati:** `mean` / `error` / `worst` / `other` (derivati dal nome della feature)
+- **Figure**
+  - Mappa **AUC** su (α, λ)  
+    ![SGL grid](assets/sgl_grid_auc.png)
+  - **Top coefficienti** (feature attive, |coef| più alto)  
+    ![SGL coeffs](assets/sgl_coeffs_top15.png)
+  - **Stabilità** (Top-20 selection frequency)  
+    ![SGL stability](assets/sgl_stability_top20.png)
 
-> Gli artifact con gli output completi si possono scaricare dalla pagina **Actions** del repository.
+> Gli output completi (CSV/PNG/JSON) sono salvati in `results/` e caricati come **artifacts** nella tab **Actions** di GitHub.
+
+---
+
+## Confronto metodi
+
+| Metodo   | AUC (±std)     | #feature attive* | Note                                  |
+|---------:|:---------------|:-----------------|:--------------------------------------|
+| SVM-RFE  | **0.985 ± 0.016** | 12              | Wrapper + RFECV, ottimo ginocchio a 12 |
+| **SGL**  | **0.994 ± 0.006** | vedi `sgl_summary.json` | Embedded: gruppi + sparsità L1        |
+
+\* *Per SGL il numero dipende dal tuning; vedi `results/sgl_summary.json` → `n_selected`.*
 
 ---
 
 ## Perché interessante
-- **p≫n classico**: SVM-RFE è uno standard su dati ad alta dimensionalità (bio/omics).
-- **Rigoroso**: preprocessing **in-pipeline** (no leakage), **CV stratificata**, nested CV per tuning.
-- **Interpretabile**: coefficienti lineari e **stabilità** di selezione (bootstrap).
+- **p≫n classico**: metodi pensati per alta dimensionalità.  
+- **Rigoroso**: tutto in **pipeline** (niente leakage), **CV stratificata**, bootstrap di **stabilità**.  
+- **Riproducibile**: Makefile, CI, risultati esportati.  
+- **Interpretabile**: coefficienti lineari, frequenze di selezione, “ginocchio” della curva.
 
 ---
 
 ## Esecuzione rapida
 
-> Python consigliato: **3.11/3.12**.
+> Python consigliato: **3.11 / 3.12** (ok anche 3.13 con le versioni attuali dei pacchetti).
 
 ```bash
 # 1) Ambiente
@@ -40,9 +63,12 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -U pip wheel
 pip install -r requirements.txt
 
-# 2) Demo RFE (usa il dataset integrato di scikit-learn)
+# 2) RFE (demo) — usa dataset integrato sklearn
 python src/rfe_simple.py --min_features 5
 
-# 3) Nested CV + Stabilità
+# 3) RFE avanzato: nested CV + stabilità
 python src/rfe_nested_stability.py --min_features 5 --n_outer 5 --n_repeats 100 --subsample 0.8
+
+# 4) SGL (gruppi mean/error/worst) + stabilità
+python src/sgl_stability.py --n_repeats 100 --subsample 0.8
 
