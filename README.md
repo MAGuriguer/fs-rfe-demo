@@ -18,7 +18,7 @@ Selezione di feature su *Breast Cancer Wisconsin (Diagnostic)* con metodi **clas
   - **Stabilità** (bootstrap 100× @ 0.8)  
     ![Stability](assets/stability_top20.png)
 
-### Sparse Group Lasso (SGL) — metodo della rassegna
+### Sparse Group Lasso (SGL)
 - **ROC-AUC (5-fold, media ± std):** **0.994 ± 0.006**  
 - **Best params:** α (L1-ratio) = **0.4**, λ = **0.001**  
 - **Gruppi usati:** `mean` / `error` / `worst` / `other` (derivati dal nome della feature)
