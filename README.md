@@ -30,7 +30,6 @@ Selezione di feature su *Breast Cancer Wisconsin (Diagnostic)* con metodi **clas
   - **Stabilità** (Top-20 selection frequency)  
     ![SGL stability](assets/sgl_stability_top20.png)
 
-> Gli output completi (CSV/PNG/JSON) sono salvati in `results/` e caricati come **artifacts** nella tab **Actions** di GitHub.
 
 ---
 
@@ -41,15 +40,7 @@ Selezione di feature su *Breast Cancer Wisconsin (Diagnostic)* con metodi **clas
 | SVM-RFE  | **0.985 ± 0.016** | 12              | Wrapper + RFECV, ottimo ginocchio a 12 |
 | **SGL**  | **0.994 ± 0.006** | vedi `sgl_summary.json` | Embedded: gruppi + sparsità L1        |
 
-\* *Per SGL il numero dipende dal tuning; vedi `results/sgl_summary.json` → `n_selected`.*
 
----
-
-## Perché interessante
-- **p≫n classico**: metodi pensati per alta dimensionalità.  
-- **Rigoroso**: tutto in **pipeline** (niente leakage), **CV stratificata**, bootstrap di **stabilità**.  
-- **Riproducibile**: Makefile, CI, risultati esportati.  
-- **Interpretabile**: coefficienti lineari, frequenze di selezione, “ginocchio” della curva.
 
 ---
 
